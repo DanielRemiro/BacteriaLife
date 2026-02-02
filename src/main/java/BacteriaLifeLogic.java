@@ -16,7 +16,12 @@ public class BacteriaLifeLogic {
         this.DIMENSION = dimension;
     }
 
-    // Generate initial generation, random positions
+    public BacteriaLifeLogic() {
+    			this.DIMENSION = 5; // Default dimension
+	}
+    
+
+	// Generate initial generation, random positions
     public int[][] generateInitialGen() {
         Random rand = new Random();
         int[][] genTable = new int[DIMENSION][DIMENSION];
