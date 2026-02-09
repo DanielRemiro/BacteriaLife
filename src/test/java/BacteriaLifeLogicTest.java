@@ -52,4 +52,45 @@ class BacteriaLifeLogicTest {
 		assertFalse(BacteriaLifeLogic.inBounds(grid, 5, 0));  // Fila excesiva
 		assertFalse(BacteriaLifeLogic.inBounds(grid, 0, 5));  // Columna excesiva
 	}
+	@Test
+	void testCheckNeighbours() {
+
+		int[][] manualGen = {
+				{1, 0, 1},
+				{0, 1, 0},
+				{0, 1, 0}
+		};
+
+		int vecinosCentral = BacteriaLifeLogic.checkNeighbours(manualGen, 1, 1);
+		assertEquals(3, vecinosCentral, "La celula central deberia tener 3 vecinos");
+
+		int vecinosEsquina = BacteriaLifeLogic.checkNeighbours(manualGen, 0, 0);
+		assertEquals(1, vecinosEsquina, "La esquina 0,0 deberia tener 1 vecino ");
+	}
+
+	@Test
+	void testGameRules() {
+
+		int[][] currentGen = {
+				{0, 1, 0},
+				{0, 1, 0},
+				{0, 1, 0}
+		};
+
+
+		BacteriaLifeLogic logic3x3 = new BacteriaLifeLogic(3);
+
+		int[][] nextGen = logic3x3.generateNewGen(currentGen);
+
+		//  Soledad (0 o 1 vecino) -> Muerte
+		assertEquals(0, nextGen[0][1], "Célula (0,1) debe morir por soledad (1 vecino)");
+		assertEquals(0, nextGen[2][1], "Célula (2,1) debe morir por soledad (1 vecino)");
+
+		// Supervivencia (2 vecinos)
+		assertEquals(1, nextGen[1][1], "Célula (1,1) debe sobrevivir (2 vecinos)");
+
+		// Nacimiento (3 vecinos)
+		assertEquals(1, nextGen[1][0], "Célula (1,0) debe nacer (3 vecinos)");
+		assertEquals(1, nextGen[1][2], "Célula (1,2) debe nacer (3 vecinos)");
+	}
 }
