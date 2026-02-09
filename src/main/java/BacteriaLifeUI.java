@@ -7,6 +7,7 @@ public class BacteriaLifeUI {
     private final BacteriaLifeLogic LOGIC;
     private static final int BACTERIA_SIZE = 10;
     private static final Color BG_COLOR = new Color(141, 69, 220);
+    Color getBG_COLOR() {return BG_COLOR;}
     private static final int DIMENSION = 30;
     private final JPanel genPanel;
 
@@ -40,14 +41,7 @@ public class BacteriaLifeUI {
             return new Dimension(diameter, diameter);
         }
 
-        public void setCircleColor(Color c) {
-            this.color = c;
-            repaint();
-        }
 
-        public Color getColor() {
-            return color;
-        }
     }
 
     // Generate a generation
