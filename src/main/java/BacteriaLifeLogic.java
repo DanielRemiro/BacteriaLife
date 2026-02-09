@@ -63,13 +63,6 @@ public class BacteriaLifeLogic {
             }
         }
 
-        // In BacteriaLifeLogic
-        if (round > MAX_ROUNDS) {
-            System.out.println("Can't get a stable gen.");
-            return gen;
-        }
-
-
         return newGen;
 
     }

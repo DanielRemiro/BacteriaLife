@@ -93,4 +93,51 @@ class BacteriaLifeLogicTest {
 		assertEquals(1, nextGen[1][0], "Célula (1,0) debe nacer (3 vecinos)");
 		assertEquals(1, nextGen[1][2], "Célula (1,2) debe nacer (3 vecinos)");
 	}
+
+	@Test
+	@DisplayName("Debe matar por asfixia (más de 3 vecinos)")
+	void testOvercrowding() {
+		int[][] currentGen = {
+				{1, 1, 1},
+				{1, 1, 1}, // La central tiene 8 vecinos -> Muere
+				{1, 1, 1}
+		};
+
+		BacteriaLifeLogic logic3x3 = new BacteriaLifeLogic(3);
+		int[][] nextGen = logic3x3.generateNewGen(currentGen);
+
+		assertEquals(0, nextGen[1][1], "La célula central debe morir por sobrepoblación (>3 vecinos)");
+	}
+
+	@Test
+	void testCheckStableGen() {
+		int[][] gen1 = {{0, 0}, {0, 0}};
+		int[][] gen2 = {{0, 0}, {0, 0}};
+		int[][] gen3 = {{0, 1}, {0, 0}};
+
+		assertTrue(BacteriaLifeLogic.checkStableGen(gen1, gen2));
+		assertFalse(BacteriaLifeLogic.checkStableGen(gen1, gen3));
+	}
+
+	@Test
+	void testMaxRounds() {
+
+		int[][] gen = new int[5][5];
+
+		// Ejecutamos 300 veces
+		for(int i = 0; i < 300; i++) {
+			gen = bacteriaLogic.generateNewGen(gen);
+		}
+
+		assertEquals(300, bacteriaLogic.getRound());
+
+		// La llamada 301 debería activar el "return gen"  y el mensaje de consola
+		int[][] result = bacteriaLogic.generateNewGen(gen);
+
+		// Verificamos que round ha subido a 301
+		assertEquals(301, bacteriaLogic.getRound());
+
+		assertSame(gen, result);
+	}
+
 }
