@@ -5,6 +5,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +22,6 @@ public class BacteriaLifeUiTest {
 
     @BeforeEach
     void setUp() {
-        // Preparamos datos iniciales válidos
         initialGen = new int[DIMENSION][DIMENSION];
         initialGen[0][0] = 1;
 
@@ -46,7 +46,7 @@ public class BacteriaLifeUiTest {
         assertNotNull(ui.bacteriaGen, "La matriz de bacterias no debe ser null");
         assertEquals(1, ui.bacteriaGen[0][0], "La matriz debe coincidir con la del mock");
 
-        // Verificación 3: La ventana se creó correctamente
+
         boolean frameFound = false;
         for (Frame f : JFrame.getFrames()) {
             if ("BacteriaLife".equals(f.getTitle()) && f.isVisible()) {
@@ -87,5 +87,48 @@ public class BacteriaLifeUiTest {
         BacteriaLifeUI.Circle circle = (BacteriaLifeUI.Circle) ui.genPanel.getComponent(0);
         assertEquals(Color.WHITE, circle.color);
     }
-    
+    @Test
+    void testStartButtonTriggersLogic() {
+        ui = new BacteriaLifeUI(mockLogic);
+
+        int[][] nextGen = new int[DIMENSION][DIMENSION];
+        nextGen[5][5] = 1;
+        when(mockLogic.generateNewGen(any(int[][].class))).thenReturn(nextGen);
+
+        JLabel dummyLabel = new JLabel("Round: 0");
+        JButton startButton = ui.getStartButton(dummyLabel);
+
+        startButton.doClick();
+
+        verify(mockLogic, timeout(1000).atLeastOnce()).generateNewGen(any(int[][].class));
+
+        verify(mockLogic, atLeastOnce()).getRound();
+    }
+
+    @Test
+    void testStartButtonStopsWaitStable() {
+        ui = new BacteriaLifeUI(mockLogic);
+
+        when(mockLogic.generateNewGen(any(int[][].class))).thenReturn(initialGen);
+
+        JButton startButton = ui.getStartButton(new JLabel());
+        startButton.doClick();
+
+        verify(mockLogic, timeout(1000).atLeastOnce()).generateNewGen(any(int[][].class));
+    }
+
+    @Test
+    void testCircleGraphics() {
+
+        BacteriaLifeUI.Circle circle = new BacteriaLifeUI.Circle(Color.RED);
+
+        assertEquals(new Dimension(10, 10), circle.getPreferredSize());
+
+        BufferedImage img = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+
+        assertDoesNotThrow(() -> circle.paint(g));
+
+        g.dispose();
+    }
 }
