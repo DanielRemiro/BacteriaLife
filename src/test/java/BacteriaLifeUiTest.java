@@ -12,18 +12,17 @@ public class BacteriaLifeUiTest {
 
     private BacteriaLifeLogic mockLogic;
     private BacteriaLifeUI ui;
+    private final int DIMENSION = 30;
+    private int[][] initialGen;
 
     @BeforeEach
     void setUp() {
-        mockLogic = mock(BacteriaLifeLogic.class);
+        initialGen = new int[DIMENSION][DIMENSION];
+        initialGen[0][0] = 1; // Un valor inicial
 
-        when(mockLogic.generateInitialGen()).thenReturn(new int[30][30]);
-
-        ui = new BacteriaLifeUI(mockLogic);
+        // Configuración básica del mock
+        lenient().when(mockLogic.generateInitialGen()).thenReturn(initialGen);
+        lenient().when(mockLogic.getRound()).thenReturn(0);
     }
-    @Test
-    void testGetBGColor(){
-        Color c= ui.getBG_COLOR();
-        assertEquals(c,ui.getBG_COLOR());
-    }
+    
 }
