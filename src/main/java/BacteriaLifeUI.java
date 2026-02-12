@@ -4,20 +4,20 @@ import java.util.Arrays;
 
 public class BacteriaLifeUI {
     // Constants
-    private final BacteriaLifeLogic LOGIC;
-    private static final int BACTERIA_SIZE = 10;
-    private static final Color BG_COLOR = new Color(141, 69, 220);
+    public final BacteriaLifeLogic LOGIC;
+    public static final int BACTERIA_SIZE = 10;
+    public static final Color BG_COLOR = new Color(141, 69, 220);
     Color getBG_COLOR() {return BG_COLOR;}
-    private static final int DIMENSION = 30;
-    private final JPanel genPanel;
+    public static final int DIMENSION = 30;
+    public final JPanel genPanel;
 
     // Current active gen
-    private int[][] bacteriaGen;
+    public int[][] bacteriaGen;
 
     // Circle class for rounded objects (bacteria)
-    private static class Circle extends JButton {
-        private Color color;
-        private final int diameter;
+    public static class Circle extends JButton {
+        public Color color;
+        public final int diameter;
 
         public Circle(Color color) {
             this.color = color;
@@ -45,7 +45,7 @@ public class BacteriaLifeUI {
     }
 
     // Generate a generation
-    private JPanel generateGen() {
+    public JPanel generateGen() {
         JPanel gen = new JPanel();
         gen.setLayout(new GridLayout(DIMENSION, DIMENSION, 3, 3));
         gen.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -66,7 +66,7 @@ public class BacteriaLifeUI {
     }
 
     // Refresh the grid after generating a new round
-    private void refreshGenPanel() {
+    public void refreshGenPanel() {
         genPanel.removeAll();
         genPanel.setLayout(new GridLayout(DIMENSION, DIMENSION, 3, 3));
 
@@ -82,7 +82,7 @@ public class BacteriaLifeUI {
     }
 
     // A bottom panel with a round label and a start button
-    private JPanel bottomPanel() {
+    public JPanel bottomPanel() {
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(BG_COLOR);
 
@@ -104,7 +104,7 @@ public class BacteriaLifeUI {
     }
 
     // Start button
-    private JButton getStartButton(JLabel roundLabel) {
+    public JButton getStartButton(JLabel roundLabel) {
         JButton startButton = new JButton("Start");
 
         startButton.addActionListener(e -> {
@@ -133,7 +133,7 @@ public class BacteriaLifeUI {
     }
 
     // To copy the gen
-    private int[][] deepCopy(int[][] bacteriaGen) {
+    public int[][] deepCopy(int[][] bacteriaGen) {
         if (bacteriaGen == null) return null;
         int[][] copy = new int[bacteriaGen.length][];
         for (int i = 0; i < bacteriaGen.length; i++) {
