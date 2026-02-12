@@ -35,5 +35,57 @@ public class BacteriaLifeUiTest {
             frame.dispose();
         }
     }
+    @Test
+    void testConstructorAndInitialization() {
+
+        ui = new BacteriaLifeUI(mockLogic);
+
+        verify(mockLogic).generateInitialGen();
+
+        assertNotNull(ui.genPanel, "El panel de generación no debe ser null");
+        assertNotNull(ui.bacteriaGen, "La matriz de bacterias no debe ser null");
+        assertEquals(1, ui.bacteriaGen[0][0], "La matriz debe coincidir con la del mock");
+
+        // Verificación 3: La ventana se creó correctamente
+        boolean frameFound = false;
+        for (Frame f : JFrame.getFrames()) {
+            if ("BacteriaLife".equals(f.getTitle()) && f.isVisible()) {
+                frameFound = true;
+                break;
+            }
+        }
+        assertTrue(frameFound, "La ventana JFrame debería estar visible");
+    }
+
+    @Test
+    void testDeepCopy() {
+        ui = new BacteriaLifeUI(mockLogic);
+
+        int[][] original = {{1, 0}, {0, 1}};
+        int[][] copy = ui.deepCopy(original);
+
+        assertArrayEquals(original[0], copy[0]);
+        assertArrayEquals(original[1], copy[1]);
+
+        assertNotSame(original, copy);
+        assertNotSame(original[0], copy[0]);
+    }
+
+    @Test
+    void testRefreshGenPanel() {
+
+        ui = new BacteriaLifeUI(mockLogic);
+
+        assertEquals(DIMENSION * DIMENSION, ui.genPanel.getComponentCount());
+
+        ui.bacteriaGen = new int[DIMENSION][DIMENSION];
+
+        ui.refreshGenPanel();
+
+        assertEquals(DIMENSION * DIMENSION, ui.genPanel.getComponentCount());
+
+        BacteriaLifeUI.Circle circle = (BacteriaLifeUI.Circle) ui.genPanel.getComponent(0);
+        assertEquals(Color.WHITE, circle.color);
+    }
     
 }
